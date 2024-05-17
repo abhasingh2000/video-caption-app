@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Container, TextField, Button } from '@mui/material';
+import VideoPlayer from './components/VideoPlayer';
+import CaptionInput from './components/CaptionInput';
 
 function App() {
+  const [videoUrl, setVideoUrl] = useState('');
+  const [captions, setCaptions] = useState([]);
+  const [caption, setCaption] = useState('');
+  const [timestamp, setTimestamp] = useState('');
+
+  const handleAddCaption = () => {
+    if (caption && timestamp) {
+      setCaptions([...captions, { text: caption, time: parseFloat(timestamp) }]);
+      setCaption('');
+      setTimestamp('');
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <h1>Video Captioning App</h1>
+      <TextField
+        label="Video URL"
+        variant="outlined"
+        fullWidth
+        value={videoUrl}
+        onChange={(e) => setVideoUrl(e.target.value)}
+        style={{ marginBottom: '20px' }}
+      />
+      <CaptionInput
+        caption={caption}
+        setCaption={setCaption}
+        timestamp={timestamp}
+        setTimestamp={setTimestamp}
+        handleAddCaption={handleAddCaption}
+      />
+      <VideoPlayer videoUrl={videoUrl} captions={captions} />
+    </Container>
   );
 }
 
